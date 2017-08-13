@@ -43,9 +43,6 @@ RUN echo 'date.timezone="Europe/Rome"' >> /usr/local/etc/php/php.ini
 # Disable short open tag for php
 RUN echo 'short_open_tag=off' >> /usr/local/etc/php/php.ini
 
-# Enable redis extension for php
-RUN echo 'extension=redis.so' >> /usr/local/etc/php/php.ini
-
 # Zsh
 RUN bash -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -q -O -)"
 RUN chsh -s /bin/zsh
