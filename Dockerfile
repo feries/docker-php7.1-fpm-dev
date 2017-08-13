@@ -13,23 +13,23 @@ RUN curl -fsS -o /tmp/icu.tgz -L http://download.icu-project.org/files/icu4c/59.
   && ./configure --prefix=/usr/local \
   && make \
   && make install \
-  # just to be certain things are cleaned up
   && rm -rf /tmp/icu*
 
 # PHP_CPPFLAGS are used by the docker-php-ext-* scripts
 ENV PHP_CPPFLAGS="$PHP_CPPFLAGS -std=c++11"
 
-RUN docker-php-ext-configure intl --with-icu-dir=/usr/local \
-  # run configure and install in the same RUN line, they extract and clean up the php source to save space
-  && docker-php-ext-install intl
-
-# Update system
-#RUN apt-get -y upgrade
+# Configure & Install Intl extension
+RUN docker-php-ext-configure intl --with-icu-dir=/usr/local && docker-php-ext-install intl
 
 # Install Xdebug
 RUN pecl install xdebug-2.5.5
+# Install apcu
 RUN pecl install apcu
-RUN docker-php-ext-enable apcu opcache xdebug
+# Install php-redis (to use it as default session handler)
+RUN pecl install redis
+
+# Enable php extensions
+RUN docker-php-ext-enable apcu opcache xdebug redis
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -39,14 +39,17 @@ RUN apt-get -y autoremove && apt-get clean && apt-get autoclean && rm -rf /var/l
 
 # Timezone configuration (For Symfony compatibility)
 RUN echo 'date.timezone="Europe/Rome"' >> /usr/local/etc/php/php.ini
+
+# Disable short open tag for php
 RUN echo 'short_open_tag=off' >> /usr/local/etc/php/php.ini
+
+# Enable redis extension for php
+RUN echo 'extension=redis.so' >> /usr/local/etc/php/php.ini
 
 # Zsh
 RUN bash -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -q -O -)"
 RUN chsh -s /bin/zsh
 
 RUN usermod -u 1000 www-data
-#RUN chown -R www-data:www-data /var/www/app/cache
-#RUN chown -R www-data:www-data /var/www/app/logs
 
 WORKDIR /var/www
