@@ -3,8 +3,14 @@ MAINTAINER Ramin Banihashemi <a@ramin.it>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+ARG XDEBUG_KEY="PHPSTORM"
+ARG XDEBUG_REMOTE_IP="10.254.254.254"
+ARG XDEBUG_REMOTE_PORT="9000"
+
+ARG PHPINI="/usr/local/etc/php/php.ini"
+
 # Install core utilities
-RUN apt-get clean && apt-get update && apt-get install -y git-core vim wget zsh libicu-dev
+RUN apt-get clean && apt-get update && apt-get install -y git-core vim wget zsh libicu-dev net-tools
 
 # Install latest Icu for php intl (mininum symfony requirement: icu 59.1)
 RUN curl -fsS -o /tmp/icu.tgz -L http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz \
@@ -29,19 +35,58 @@ RUN pecl install apcu
 RUN pecl install redis
 
 # Enable php extensions
+RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-enable apcu opcache xdebug redis
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Install Symfony bin
+RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony && chmod a+x /usr/local/bin/symfony
+
 # Clean Apt
 RUN apt-get -y autoremove && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Timezone configuration (For Symfony compatibility)
-RUN echo 'date.timezone="Europe/Rome"' >> /usr/local/etc/php/php.ini
+# ADD CUSTOM POOL FOR CUSTOMIZE FPM PORT (TO 9001)
+ADD config/zz-docker.conf /usr/local/etc/php-fpm.d/
 
-# Disable short open tag for php
-RUN echo 'short_open_tag=off' >> /usr/local/etc/php/php.ini
+# - Disable short open tag for php
+# - Error reporting ALL
+# - Display startup errors
+RUN echo "[PHP]\n"\
+    "short_open_tag=off\n"\
+    "error_reporting=E_ALL\n"\
+    "display_startup_errors=On\n"\
+     >> $PHPINI
+
+# Timezone configuration (For Symfony compatibility)
+RUN echo "[Date]\n"\
+    "date.timezone=\"Europe/Rome\"\n"\
+     >> $PHPINI
+
+# Use REDIS as default session handler
+RUN echo "\n[SESSION]\n"\
+    "session.save_handler=\"redis\"\n"\
+    "session.save_path=\"tcp://redis-session:6379\"\n"\
+     >> $PHPINI
+
+# ADD XDEBUG DIRECTIVE IN PHP.INI
+RUN echo "\n[XDEBUG]\n"\
+    "xdebug.idekey=$XDEBUG_KEY\n"\
+    "xdebug.default_enable=1\n"\
+    "xdebug.remote_enable=1\n"\
+    "xdebug.remote_autostart=0\n"\
+    "xdebug.remote_connect_back=0\n"\
+    "xdebug.remote_handler=dbgp\n"\
+    "xdebug.profiler_enable=0\n"\
+    "xdebug.remote_host=$XDEBUG_REMOTE_IP\n"\
+    "xdebug.remote_port=$XDEBUG_REMOTE_PORT\n"\
+    >> $PHPINI
+
+# Set timezone
+RUN rm /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Europe/Rome /etc/localtime
+RUN "date"
 
 # Zsh
 RUN bash -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -q -O -)"
@@ -50,3 +95,6 @@ RUN chsh -s /bin/zsh
 RUN usermod -u 1000 www-data
 
 WORKDIR /var/www
+
+# FPM PORT
+EXPOSE 9001
