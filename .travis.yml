@@ -1,0 +1,25 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.14.0
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - chmod +x /usr/local/bin/docker-compose
+
+  - docker build -t feries/php7.1 .
+  - docker run --name php7.1 -d feries/php7.1
+
+script:
+  - docker exec php7.1 php -v
+  - docker exec php7.1 sh -c "php -v | grep OPcache"
+  - docker exec php7.1 sh -c "php -v | grep Xdebug"
+  - docker exec php7.1 composer --version
+  - docker exec php7.1 symfony --version
+  - docker exec php7.1 sh -c "php -i | grep intl"
+  - docker exec php7.1 sh -c "php -i | grep 'API Extensions => pdo_mysql'"
