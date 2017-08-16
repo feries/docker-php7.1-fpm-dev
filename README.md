@@ -3,6 +3,7 @@ PHP-FPM 7.1 use **ONLY** for development environment
 
 **Good for the latest stable version of symfony**
 
+[![Build Status](https://travis-ci.org/feries/docker-php7.1-fpm-dev.svg?branch=master)](https://travis-ci.org/feries/docker-php7.1-fpm-dev)
 [![](https://images.microbadger.com/badges/image/feries/php7.1.svg)](https://microbadger.com/images/feries/php7.1 "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/feries/php7.1.svg)](https://microbadger.com/images/feries/php7.1 "Get your own version badge on microbadger.com")
 
