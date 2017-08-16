@@ -1,6 +1,13 @@
 FROM php:7.1-fpm
 MAINTAINER Ramin Banihashemi <a@ramin.it>
 
+LABEL \
+    name="Feries's PHP-FPM 7.1-Dev Image" \
+    image="php-fpm-7.1" \
+    vendor="feries" \
+    license="GPLv3" \
+    build-date="2017-08-16"
+
 ENV DEBIAN_FRONTEND noninteractive
 
 ARG XDEBUG_KEY="PHPSTORM"
