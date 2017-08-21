@@ -61,7 +61,19 @@ If you use this docker with compose, simply add this service to your docker-comp
 
       redis-session:
           image: redis:latest
-          hostname: redis-session 
+          hostname: redis-session
+          ports:
+            - "6379:6379"
+            
+And link php container with redis
+
+eg.
+
+      php:
+          image: feries/php7.1:latest
+          hostname: php
+          links:
+              - redis-session
 
 
 *** 
