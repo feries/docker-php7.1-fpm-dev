@@ -17,6 +17,7 @@ PHP-FPM 7.1 use **ONLY** for development environment
     - PHP extension for interfacing with **Redis** (with php session.save_handler pre-configurated with tcp://redis-session:6379)
     - **PHP Intl** extension with **Icu** 59.1
     - **PHP pdo/pdo_mysql** extension 
+    - **PHP zip** extension 
 - **Xdebug** 2.5.5 (on *port 9000*)
 - **Composer**
 - **Symfony bin**
