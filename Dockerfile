@@ -42,7 +42,7 @@ RUN pecl install apcu
 RUN pecl install redis
 
 # Enable php extensions
-RUN docker-php-ext-install pdo pdo_mysql zip
+RUN docker-php-ext-install pdo pdo_mysql zip bcmath
 RUN docker-php-ext-enable apcu opcache xdebug redis
 
 # Install Composer
