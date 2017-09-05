@@ -99,6 +99,16 @@ RUN "date"
 RUN bash -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -q -O -)"
 RUN chsh -s /bin/zsh
 
+# Copy custom rc file to .bashrc & .zshrc
+RUN cat config/rc >> ~/.bashrc
+RUN cat config/rc >> ~/.zshrc
+
+# Alias to execute php in cli with xdebug (es. phpdebug file.php)
+# In docker-compose.yml add this environment PHP_IDE_CONFIG: "serverName=hostname"
+# Otherwise start with docker run with -e 'PHP_IDE_CONFIG="serverName=hostname"'
+RUN echo "\nalias phpdebug='XDEBUG_CONFIG=\"idekey=$XDEBUG_KEY\" php'" >> ~/.zshrc
+RUN echo "\nalias phpdebug='XDEBUG_CONFIG=\"idekey=$XDEBUG_KEY\" php'" >> ~/.bashrc
+
 RUN usermod -u 1000 www-data
 
 WORKDIR /var/www

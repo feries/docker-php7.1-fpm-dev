@@ -1,0 +1,6 @@
+
+# Alias definitions
+
+for f in ~/rc/*; do
+   . $f
+done
