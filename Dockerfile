@@ -100,8 +100,9 @@ RUN bash -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 RUN chsh -s /bin/zsh
 
 # Copy custom rc file to .bashrc & .zshrc
-RUN cat config/rc >> /root/.bashrc
-RUN cat config/rc >> /root/.zshrc
+ADD config/rc /root/rc
+RUN cat /root/rc >> /root/.bashrc
+RUN cat /root/rc >> /root/.zshrc
 
 # Alias to execute php in cli with xdebug (es. phpdebug file.php)
 # In docker-compose.yml add this environment PHP_IDE_CONFIG: "serverName=hostname"
