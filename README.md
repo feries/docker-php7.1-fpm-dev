@@ -1,5 +1,5 @@
-# PHP-FPM 7.1-DEV Docker
-PHP-FPM 7.1 use **ONLY** for development environment
+# PHP-FPM 7.1.12-DEV Docker
+PHP-FPM 7.1.12 use **ONLY** for development environment
 
 **Good for the latest stable version of symfony**
 
@@ -7,11 +7,11 @@ PHP-FPM 7.1 use **ONLY** for development environment
 [![](https://images.microbadger.com/badges/image/feries/php7.1.svg)](https://microbadger.com/images/feries/php7.1 "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/feries/php7.1.svg)](https://microbadger.com/images/feries/php7.1 "Get your own version badge on microbadger.com")
 
-*Based on **[php:7.1-fpm](https://github.com/docker-library/php/blob/master/7.1/Dockerfile)***
+*Based on **[php:7.1.12-fpm](https://github.com/docker-library/php/blob/master/7.1/jessie/fpm/Dockerfile)***
 
 ## Services
 
-- **PHP-FPM 7.1x** (on *port 9001*)
+- **PHP-FPM 7.1.12** (on *port 9001*)
     - **APCu** - APC User Cache
     - **OPcache**
     - PHP extension for interfacing with **Redis** (with php session.save_handler pre-configurated with tcp://redis-session:6379)
@@ -20,7 +20,6 @@ PHP-FPM 7.1 use **ONLY** for development environment
     - **PHP zip** extension 
 - **Xdebug** 2.5.5 (on *port 9000*)
 - **Composer**
-- **Symfony bin**
 - **GIT**
 - **ZSH** (with *oh-my-zsh*) shell
 
