@@ -12,6 +12,5 @@ script:
   - docker exec php7.1 sh -c "php -v | grep OPcache"
   - docker exec php7.1 sh -c "php -v | grep Xdebug"
   - docker exec php7.1 composer --version
-  - docker exec php7.1 symfony --version
   - docker exec php7.1 sh -c "php -i | grep intl"
   - docker exec php7.1 sh -c "php -i | grep 'API Extensions => pdo_mysql'"
