@@ -1,6 +1,9 @@
 
 # Alias definitions
 
-for f in ~/rc/*; do
-   . $f
-done
+files=$(echo ~/rc/*)
+if (( ${#files} )); then
+    for f in ~/rc/*; do
+       [[ -f $f ]] && . $f
+    done
+fi
