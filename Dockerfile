@@ -17,7 +17,7 @@ ARG XDEBUG_REMOTE_PORT="9000"
 ARG PHPINI="/usr/local/etc/php/php.ini"
 
 # Install core utilities
-RUN apt-get clean && apt-get update && apt-get install -y git-core vim wget zsh libicu-dev net-tools zlib1g-dev zip unzip
+RUN apt-get clean && apt-get update && apt-get install -y git-core vim wget zsh libicu-dev net-tools zlib1g-dev zip unzip libpng-dev
 
 # Install latest Icu for php intl (mininum symfony requirement: icu 59.1)
 RUN curl -fsS -o /tmp/icu.tgz -L http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz \
@@ -42,7 +42,7 @@ RUN pecl install apcu
 RUN pecl install redis
 
 # Enable php extensions
-RUN docker-php-ext-install pdo pdo_mysql zip bcmath
+RUN docker-php-ext-install pdo pdo_mysql zip bcmath gd
 RUN docker-php-ext-enable apcu opcache xdebug redis
 
 # Install Composer
