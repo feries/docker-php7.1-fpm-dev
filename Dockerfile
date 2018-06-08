@@ -2,11 +2,11 @@ FROM php:7.1.12-fpm
 MAINTAINER Ramin Banihashemi <a@ramin.it>
 
 LABEL \
-    name="Feries's PHP-FPM 7.1.11-2-Dev Image" \
+    name="Feries's PHP-FPM 7.1.11-3-Dev Image" \
     image="php-fpm-7.1.11-2" \
     vendor="feries" \
     license="GPLv3" \
-    build-date="2018-06-04"
+    build-date="2018-06-08"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -47,6 +47,9 @@ RUN docker-php-ext-enable apcu opcache xdebug redis
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install PHP Coding Standards Fixer 
+RUN composer global require friendsofphp/php-cs-fixer
 
 # Clean Apt
 RUN apt-get -y autoremove && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
