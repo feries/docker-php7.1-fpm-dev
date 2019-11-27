@@ -64,6 +64,7 @@ RUN echo "[PHP]\n"\
     "short_open_tag=off\n"\
     "error_reporting=E_ALL\n"\
     "display_startup_errors=On\n"\
+    "memory_limit=512M\n"\
      >> $PHPINI
 
 # Timezone configuration (For Symfony compatibility)
